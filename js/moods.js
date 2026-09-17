@@ -28,13 +28,22 @@ export function moodFace(mood, { size = 40, color = null, muted = false } = {}) 
 <circle cx="50" cy="50" r="50" fill="${fill}"/>${eyes(ink)}${mouth(mood, ink)}</svg>`;
 }
 
-// Mascot used in the avatar pill and the floating log button.
-export function bean(size = 34, color = '#A5CF7A') {
+// The floating log button: a plain circle face, like the reference app.
+export function mascot(size = 56, color = '#ACCF7B') {
   const ink = '#2E2E2E';
   return `<svg width="${size}" height="${size}" viewBox="0 0 100 100" aria-hidden="true">
-<path fill="${color}" d="M50 4c22 0 39 17 39 40 0 28-17 52-39 52S11 72 11 44C11 21 28 4 50 4z"/>
-<circle cx="36" cy="42" r="4.6" fill="${ink}"/><circle cx="64" cy="42" r="4.6" fill="${ink}"/>
-<path fill="none" stroke="${ink}" stroke-width="5" stroke-linecap="round" d="M39 54q11 9 22 0"/></svg>`;
+<circle cx="50" cy="50" r="50" fill="${color}"/>${eyes(ink)}${mouth(1, ink)}</svg>`;
+}
+
+// The avatar in the top-left pill: a bean sitting in its pod.
+export function pod(size = 26) {
+  const ink = '#2E2E2E';
+  return `<svg width="${size}" height="${size}" viewBox="0 0 100 100" aria-hidden="true">
+<path fill="#57A867" d="M83 9c9 2 11 5 10 14-2 20-4 38-16 52-11 13-28 20-50 18-9-1-12-4-13-13-2-21 2-40 14-54C40 12 60 4 83 9z"/>
+<path fill="#3E8A4E" d="M14 80c14 9 32 9 47-1 14-9 22-24 26-42 2 20 0 39-12 54-11 13-28 20-50 18-9-1-12-4-13-13a54 54 0 0 1 2-16z"/>
+<circle cx="50" cy="42" r="26" fill="#B7DC92"/>
+<circle cx="41" cy="39" r="3.6" fill="${ink}"/><circle cx="59" cy="39" r="3.6" fill="${ink}"/>
+<path fill="none" stroke="${ink}" stroke-width="3.4" stroke-linecap="round" d="M42 49q8 7 16 0"/></svg>`;
 }
 
 export function sprout(size = 30) {

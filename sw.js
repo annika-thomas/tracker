@@ -1,5 +1,5 @@
 // Offline shell. Bump CACHE when the app changes.
-const CACHE = 'mood-tracker-v1';
+const CACHE = 'mood-tracker-v2';
 const CORE = [
   './', './index.html', './app.css', './manifest.webmanifest',
   './js/app.js', './js/ui.js', './js/db.js', './js/icons.js', './js/moods.js',

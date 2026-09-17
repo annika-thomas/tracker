@@ -40,8 +40,8 @@ the repository as-is.
 | --- | --- |
 | Calendar | Month grid of mood faces; tap a day to see it, tap again to edit. Selected day is pilled in green. |
 | Entry card | Mood, favourite star, photos, emotions + activities as chips, note, weather and sleep. |
-| Editor | Five-mood selector, 20 labelled emotions, activity icons from the picker, photos, note, weather, sleep. |
-| Icon picker | ~400 icons across eight categories — People, Nature, Food & Drink, Travel & Places, Activities, Objects, Health & Home, Exercise (plus stars and digits). |
+| Editor | Five-mood selector, 20 labelled emotions, then pre-filled sections you tap straight through — who you were with, activities, food, health & home, exercise, nature, things, places — plus photos, note, weather and sleep. Each section has a ＋ that opens the full picker. |
+| Icon picker | ~410 icons across eight categories — People, Nature, Food & Drink, Travel & Places, Activities, Objects, Health & Home, Exercise (plus stars and digits). |
 | Stats | *Monthly*: Mood Flow line chart and Mood Bar, with a faded sample and a prompt when a month is empty. *Annual*: a year of months as mood dots. |
 | Archive | Every entry, searchable by note or emotion, with the "When did I record…" filter sheet (moods, emotions, period) and favourites. |
 | Profile | Averages and streak, theme, week start, automatic weather, backup / restore / erase. |

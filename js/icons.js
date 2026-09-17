@@ -163,6 +163,38 @@ export const WEATHERS = [
   { id: 'wind',    icon: 'c:wind',label: 'Windy' }
 ];
 
+
+// Sections the editor shows pre-filled, under Emotions — the same shape as the
+// reference app: a labelled grid you tap through, with the picker for anything else.
+export const PEOPLE = [
+  { id: 'w-self',    label: 'alone',    icon: 'c:w-self' },
+  { id: 'w-friends', label: 'friends',  icon: 'c:w-friends' },
+  { id: 'w-partner', label: 'partner',  icon: 'c:w-partner' },
+  { id: 'w-family',  label: 'family',   icon: 'c:w-family' },
+  { id: 'w-crowd',   label: 'a group',  icon: 'c:w-crowd' },
+  { id: 'w-work',    label: 'work',     icon: 'c:w-work' },
+  { id: 'w-pet',     label: 'my pet',   icon: 'c:w-pet' },
+  { id: 'w-star',    label: 'someone special', icon: 'c:w-star' },
+  { id: 'w-hill',    label: 'outdoors', icon: 'c:w-hill' },
+  { id: 'w-none',    label: 'no one',   icon: 'c:w-none' }
+];
+
+const take = (catId, n) => {
+  const c = CATEGORIES.find(x => x.id === catId);
+  return c.sections.flatMap(s => s.items).slice(0, n);
+};
+
+export const EDITOR_SECTIONS = [
+  { id: 'people',   title: 'Who I was with', items: PEOPLE.map(p => p.icon), labels: PEOPLE },
+  { id: 'activity', title: 'Activities',     items: take('activity', 30) },
+  { id: 'food',     title: 'Food & Drink',   items: take('food', 30) },
+  { id: 'home',     title: 'Health & Home',  items: take('home', 30) },
+  { id: 'exercise', title: 'Exercise',       items: take('exercise', 24), green: true },
+  { id: 'nature',   title: 'Nature',         items: take('nature', 30) },
+  { id: 'object',   title: 'Things',         items: take('object', 30) },
+  { id: 'travel',   title: 'Places',         items: take('travel', 24) }
+];
+
 export function iconSrc(id) {
   return id.startsWith('c:')
     ? `assets/icons/c-${id.slice(2)}.svg`
@@ -173,12 +205,18 @@ export const ALL_ICON_IDS = (() => {
   const out = [];
   for (const c of CATEGORIES) for (const s of c.sections) for (const i of s.items) out.push(i);
   for (const e of EMOTIONS) out.push(e.icon);
+  for (const p of PEOPLE) out.push(p.icon);
   for (const w of WEATHERS) out.push(w.icon);
   return [...new Set(out)];
 })();
 
 export const GREEN_CATEGORY_IDS = new Set(
   CATEGORIES.filter(c => c.green).map(c => c.id)
+);
+
+// icons drawn as green pictograms rather than full-colour art
+export const GREEN_ICONS = new Set(
+  CATEGORIES.filter(c => c.green).flatMap(c => c.sections.flatMap(s => s.items))
 );
 
 export function categoryOf(iconId) {

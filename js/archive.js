@@ -1,5 +1,5 @@
 import { h, esc, I, openSheet } from './ui.js';
-import { moodFace, bean, MOODS } from './moods.js';
+import { moodFace, pod, MOODS } from './moods.js';
 import { EMOTIONS, iconSrc } from './icons.js';
 
 const MON = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
@@ -50,7 +50,7 @@ export function renderArchive(S) {
 
   return `<section class="screen is-active" id="s-archive">
     <div class="topbar">
-      <button class="avatar-pill" data-act="quick">${bean(26)}${I.chevronDown({ s: 16 })}</button>
+      <button class="avatar-pill" data-act="quick">${pod(26)}${I.chevronDown({ s: 16 })}</button>
       <div class="topbar-right">
         <button class="icon-btn" data-arc="mode">${S.archiveMode === 'list' ? I.navArchive({ s: 23 }) : I.navCal({ s: 23 })}</button>
         <button class="icon-btn" data-act="menu">${I.menu({ s: 24 })}</button>

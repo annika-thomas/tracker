@@ -1,5 +1,5 @@
 import { h, I, openSheet, toast, confirmSheet } from './ui.js';
-import { bean, MOODS, moodFace } from './moods.js';
+import { pod, mascot, MOODS, moodFace } from './moods.js';
 
 const pad = (n) => String(n).padStart(2, '0');
 
@@ -24,7 +24,7 @@ export function renderProfile(S) {
 
   return `<section class="screen is-active" id="s-profile">
     <div class="topbar">
-      <button class="avatar-pill" data-act="quick">${bean(26)}${I.chevronDown({ s: 16 })}</button>
+      <button class="avatar-pill" data-act="quick">${pod(26)}${I.chevronDown({ s: 16 })}</button>
       <div class="topbar-right">
         <button class="icon-btn" data-act="theme">${I.palette({ s: 24 })}</button>
         <button class="icon-btn" data-act="menu">${I.menu({ s: 24 })}</button>
@@ -33,7 +33,7 @@ export function renderProfile(S) {
     <div class="month-head"><div class="month-title">Profile</div></div>
 
     <div style="display:flex;flex-direction:column;align-items:center;gap:8px;padding:6px 0 20px">
-      ${avg == null ? bean(78) : moodFace(Math.round(avg), { size: 78 })}
+      ${avg == null ? mascot(78) : moodFace(Math.round(avg), { size: 78 })}
       <b style="font-size:17px">${all.length ? `Mostly ${MOODS[Math.round(avg)].label}` : 'No entries yet'}</b>
       <small style="color:var(--muted)">${all.length ? `across ${all.length} ${all.length === 1 ? 'day' : 'days'}` : 'Tap the bean to log today'}</small>
     </div>

@@ -1,5 +1,5 @@
 import { $, h, esc, I, openSheet, toast } from './ui.js';
-import { MOODS, moodFace, bean, sprout } from './moods.js';
+import { MOODS, moodFace, mascot, pod, sprout } from './moods.js';
 import { EMOTIONS, WEATHERS, iconSrc, GREEN_CATEGORY_IDS, categoryOf } from './icons.js';
 import { db, exportJSON, importJSON } from './db.js';
 import { openEditor } from './editor.js';
@@ -54,7 +54,7 @@ export function iconChip(id, { on = true, size = null } = {}) {
 
 function topbar() {
   return `<div class="topbar">
-    <button class="avatar-pill" data-act="quick">${bean(26)}${I.chevronDown({ s: 16 })}</button>
+    <button class="avatar-pill" data-act="quick">${pod(26)}${I.chevronDown({ s: 16 })}</button>
     <div class="topbar-right">
       <button class="icon-btn" data-act="theme" aria-label="Theme">${I.palette({ s: 24 })}</button>
       <button class="icon-btn" data-act="menu" aria-label="Menu">${I.menu({ s: 24 })}</button>
@@ -153,7 +153,7 @@ function nav() {
     ${b('archive', I.navArchive({ s: 25 }), 'Archive')}
     ${b('profile', I.navUser({ s: 25 }), 'Profile')}
   </div>
-  <button class="fab" data-act="log" aria-label="Log today">${bean(56)}</button>`;
+  <button class="fab" data-act="log" aria-label="Log today">${mascot(56)}</button>`;
 }
 
 // ---------------------------------------------------------------- render

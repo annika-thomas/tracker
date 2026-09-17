@@ -1,5 +1,5 @@
 import { I } from './ui.js';
-import { MOODS, moodFace, bean } from './moods.js';
+import { MOODS, moodFace, pod } from './moods.js';
 
 const pad = (n) => String(n).padStart(2, '0');
 const MON = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
@@ -112,7 +112,7 @@ export function renderStats(S) {
 
   return `<section class="screen is-active" id="s-stats">
     <div class="topbar">
-      <button class="avatar-pill" data-act="quick">${bean(26)}${I.chevronDown({ s: 16 })}</button>
+      <button class="avatar-pill" data-act="quick">${pod(26)}${I.chevronDown({ s: 16 })}</button>
       <div class="topbar-right">
         <button class="icon-btn" data-act="theme">${I.palette({ s: 24 })}</button>
         <button class="icon-btn" data-act="menu">${I.menu({ s: 24 })}</button>

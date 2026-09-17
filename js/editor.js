@@ -1,6 +1,6 @@
 import { h, esc, I, openFull, openSheet, toast, confirmSheet } from './ui.js';
 import { MOODS, moodFace } from './moods.js';
-import { CATEGORIES, EMOTIONS, WEATHERS, iconSrc, GREEN_CATEGORY_IDS } from './icons.js';
+import { CATEGORIES, EMOTIONS, WEATHERS, EDITOR_SECTIONS, iconSrc, GREEN_CATEGORY_IDS, GREEN_ICONS } from './icons.js';
 
 const TAB_ICONS = {
   face: I.tabFace, tree: I.tabTree, burger: I.tabFood, pin: I.tabPin,
@@ -24,9 +24,9 @@ async function fetchWeather() {
 }
 
 // --------------------------------------------------------------- icon picker
-export function openIconPicker(selected, onDone) {
+export function openIconPicker(selected, onDone, startCat) {
   const chosen = new Set(selected);
-  let tab = CATEGORIES[0].id;
+  let tab = CATEGORIES.some(c => c.id === startCat) ? startCat : CATEGORIES[0].id;
 
   const body = h('<div><div class="tabs"></div><div class="pick-body"></div></div>');
   const tabs = body.querySelector('.tabs');
@@ -97,6 +97,7 @@ export async function openEditor(dateKey) {
     fav: !!existing?.fav
   };
   let emotionsOpen = true;
+  const collapsed = {};
 
   const body = h('<div style="padding:4px 0 24px"></div>');
 
@@ -116,11 +117,7 @@ export async function openEditor(dateKey) {
             <span>${esc(e.label)}</span></button>`;
         }).join('')}</div>` : ''}`),
 
-      card(`<div class="section-head"><h3>Activities</h3>
-        <button data-act="pick" style="color:var(--accent);font-weight:600;font-size:14px">Edit</button></div>
-        <div class="pick-grid">${draft.icons.map(id =>
-          `<button data-del-icon="${id}"><span class="ic${GREEN_CATEGORY_IDS.has(catOf(id)) ? ' is-green' : ''}"><img src="${iconSrc(id)}" alt=""></span></button>`).join('')}
-          <button data-act="pick"><span class="add-chip">＋</span></button></div>`),
+      ...EDITOR_SECTIONS.map(sec => sectionCard(sec)),
 
       card(`<div class="section-head"><h3>Photo</h3></div>
         ${draft.photos.length ? `<div class="thumbs">${draft.photos.map((p, i) =>
@@ -143,6 +140,30 @@ export async function openEditor(dateKey) {
           <input class="input" style="flex:1" type="number" min="1" max="9" inputmode="numeric" data-sleep-c placeholder="sessions" value="${draft.sleep.count || 1}">
         </div>`)
     ].join('');
+  };
+
+  const sectionCard = (sec) => {
+    const open = collapsed[sec.id] !== true;
+    // anything picked from the browser that belongs here shows alongside the defaults
+    const extras = draft.icons.filter(id => !sec.items.includes(id) && catOf(id) === sec.id);
+    const items = [...sec.items, ...extras];
+    const chip = (id) => {
+      const on = draft.icons.includes(id);
+      const green = sec.green || GREEN_ICONS.has(id);
+      return `<span class="ic${on ? '' : ' is-off'}${green ? ' is-green' : ''}"><img src="${iconSrc(id)}" alt="" loading="lazy"></span>`;
+    };
+    const body = sec.labels
+      ? `<div class="emotion-grid">${sec.labels.map(p => {
+          const on = draft.icons.includes(p.icon);
+          return `<button class="emotion${on ? ' is-on' : ''}" data-icon="${p.icon}">
+            ${chip(p.icon)}<span>${esc(p.label)}</span></button>`;
+        }).join('')}</div>`
+      : `<div class="pick-grid">${items.map(id =>
+          `<button data-icon="${id}">${chip(id)}</button>`).join('')}
+          <button data-act="pick" data-pick-cat="${sec.id}"><span class="add-chip">＋</span></button></div>`;
+    return card(`<div class="section-head"><h3>${esc(sec.title)}</h3>
+      <button data-collapse="${sec.id}" class="icon-btn" style="color:var(--muted)">${open ? I.chevronUp({ s: 22 }) : I.chevronDown({ s: 22 })}</button></div>
+      ${open ? body : ''}`);
   };
 
   const catOf = (id) => {
@@ -183,8 +204,16 @@ export async function openEditor(dateKey) {
       draw(); return;
     }
 
-    const delIcon = t.closest('[data-del-icon]');
-    if (delIcon) { readInputs(); draft.icons = draft.icons.filter(x => x !== delIcon.dataset.delIcon); draw(); return; }
+    const iconBtn = t.closest('[data-icon]');
+    if (iconBtn) {
+      readInputs();
+      const id = iconBtn.dataset.icon;
+      draft.icons = draft.icons.includes(id) ? draft.icons.filter(x => x !== id) : [...draft.icons, id];
+      draw(); return;
+    }
+
+    const col = t.closest('[data-collapse]');
+    if (col) { readInputs(); const k = col.dataset.collapse; collapsed[k] = !collapsed[k]; draw(); return; }
 
     const delPhoto = t.closest('[data-del-photo]');
     if (delPhoto) { readInputs(); draft.photos.splice(Number(delPhoto.dataset.delPhoto), 1); draw(); return; }
@@ -201,7 +230,8 @@ export async function openEditor(dateKey) {
     if (act === 'toggle-emo') { readInputs(); emotionsOpen = !emotionsOpen; draw(); }
     if (act === 'pick') {
       readInputs();
-      openIconPicker(draft.icons, (ids) => { draft.icons = ids; draw(); });
+      const startCat = t.closest('[data-pick-cat]')?.dataset.pickCat;
+      openIconPicker(draft.icons, (ids) => { draft.icons = ids; draw(); }, startCat);
     }
     if (act === 'photo') {
       readInputs();
