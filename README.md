@@ -44,9 +44,14 @@ the repository as-is.
 | Icon picker | ~410 icons across eight categories — People, Nature, Food & Drink, Travel & Places, Activities, Objects, Health & Home, Exercise (plus stars and digits). |
 | Stats | *Monthly*: Mood Flow line chart and Mood Bar, with a faded sample and a prompt when a month is empty. *Annual*: a year of months as mood dots. |
 | Archive | Every entry, searchable by note or emotion, with the "When did I record…" filter sheet (moods, emotions, period) and favourites. |
-| Profile | Averages and streak, theme, week start, automatic weather, backup / restore / erase. |
+| Profile | Averages and streak, theme, week start, automatic weather, section editing, backup / restore / erase. |
 
 Icons are **grey when unselected and full colour when selected**, everywhere they appear.
+
+The sections are yours to rearrange: the gear in the entry editor (also Profile → *Icons in each
+section*) opens an editor where ✕ takes an icon out and ＋ adds one from the full picker. Adding an
+icon to a section takes it out of whichever section held it, so an icon lives in exactly one place.
+Your arrangement is stored with your settings; *Reset to the defaults* puts it back.
 
 ## Your data
 
@@ -74,7 +79,8 @@ js/
   stats.js              monthly charts and the annual grid
   archive.js            archive list, search, filter sheet
   profile.js            profile and settings
-  icons.js              icon catalogue, emotions, weather list, editor sections
+  icons.js              icon catalogue, emotions, weather list, default editor sections
+  sections.js           the section editor, and your saved arrangement
   labels.js             short name for every icon (generated, then hand-tuned)
   moods.js              the five mood faces and the mascot, as inline SVG
   db.js                 IndexedDB wrapper, JSON export/import

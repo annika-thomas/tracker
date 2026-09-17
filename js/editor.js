@@ -2,6 +2,7 @@ import { h, esc, I, openFull, openSheet, toast, confirmSheet } from './ui.js';
 import { MOODS, moodFace } from './moods.js';
 import { CATEGORIES, EMOTIONS, WEATHERS, EDITOR_SECTIONS, iconSrc, GREEN_CATEGORY_IDS, GREEN_ICONS } from './icons.js';
 import { label } from './labels.js';
+import { sectionsFor, openSectionEditor } from './sections.js';
 
 const TAB_ICONS = {
   face: I.tabFace, tree: I.tabTree, burger: I.tabFood, pin: I.tabPin,
@@ -118,9 +119,8 @@ export async function openEditor(dateKey) {
     const extras = draft.icons.filter(id => !sec.items.includes(id) && catOf(id) === sec.id);
     const items = [...sec.items, ...extras];
     const cells = items.map(id =>
-      labelledCell(id, draft.icons.includes(id), sec.green || GREEN_ICONS.has(id), sec.labels
-        ? sec.labels.find(p => p.icon === id)?.label || label(id)
-        : label(id))).join('');
+      labelledCell(id, draft.icons.includes(id), sec.green || GREEN_ICONS.has(id),
+        (sec.labels && sec.labels.find(p => p.icon === id)?.label) || label(id))).join('');
     return card(`<div class="section-head"><h3>${esc(sec.title)}</h3>
       <button data-collapse="${sec.id}" class="icon-btn" style="color:var(--muted)">${I.chevronUp({ s: 22 })}</button></div>
       <div data-body="${sec.id}">
@@ -132,7 +132,8 @@ export async function openEditor(dateKey) {
   };
 
   const body = h('<div style="padding:4px 0 24px"></div>');
-  body.innerHTML = [
+  const buildBody = () => { body.innerHTML = bodyHTML(); drawPhotos(); };
+  const bodyHTML = () => [
     card(`<div class="mood-row" data-moods>${MOODS.map((m, i) =>
       `<button data-mood="${i}">${moodFace(i, { size: 44, muted: draft.mood !== i })}</button>`).join('')}</div>`),
 
@@ -142,7 +143,7 @@ export async function openEditor(dateKey) {
         `<button class="emotion${draft.emotions.includes(e.id) ? ' is-on' : ''}" data-emo="${e.id}">
           ${chipHTML(e.icon, draft.emotions.includes(e.id), false)}<span>${esc(e.label)}</span></button>`).join('')}</div></div>`),
 
-    ...EDITOR_SECTIONS.map(sectionHTML),
+    ...sectionsFor(S.settings).map(sectionHTML),
 
     card(`<div class="section-head"><h3>Photo</h3></div>
       <div data-photos></div>
@@ -161,8 +162,11 @@ export async function openEditor(dateKey) {
         <input class="input" style="flex:1" type="number" min="0" max="24" inputmode="numeric" id="sleep-h" data-sleep-h placeholder="h" value="${draft.sleep.mins ? Math.floor(draft.sleep.mins / 60) : ''}">
         <input class="input" style="flex:1" type="number" min="0" max="59" inputmode="numeric" id="sleep-m" data-sleep-m placeholder="m" value="${draft.sleep.mins ? draft.sleep.mins % 60 : ''}">
         <input class="input" style="flex:1" type="number" min="1" max="9" inputmode="numeric" id="sleep-c" data-sleep-c placeholder="sessions" value="${draft.sleep.count || 1}">
-      </div>`)
+      </div>`),
+
+    existing ? `<div style="padding:2px 16px 0"><button class="btn btn-ghost danger" data-act="delete" style="width:100%">Delete this entry</button></div>` : ''
   ].join('');
+  body.innerHTML = bodyHTML();
 
   const foot = h(`<div style="display:flex;gap:10px;width:100%">
     <button class="btn btn-square" data-act="fav">${draft.fav ? I.starFull({ s: 22 }) : I.star({ s: 22 })}</button>
@@ -293,15 +297,13 @@ export async function openEditor(dateKey) {
       foot.children[0].innerHTML = draft.fav ? I.starFull({ s: 22 }) : I.star({ s: 22 });
     }
     if (act === 'gear') {
-      const inner = h(`<div style="padding-bottom:16px">
-        <button class="list-row danger" data-a="del" style="background:var(--bg);border-radius:14px"><span class="t"><b>Delete this entry</b></span></button></div>`);
-      const sheet = openSheet({ title: 'Entry options', body: inner });
-      inner.onclick = async () => {
-        sheet.close();
-        if (await confirmSheet('Delete entry', 'This entry will be removed from this device.')) {
-          await deleteEntry(dateKey); full.close();
-        }
-      };
+      readInputs();
+      openSectionEditor(() => buildBody());
+    }
+    if (act === 'delete') {
+      if (await confirmSheet('Delete entry', 'This entry will be removed from this device.')) {
+        await deleteEntry(dateKey); full.close();
+      }
     }
     if (act === 'done') {
       readInputs();

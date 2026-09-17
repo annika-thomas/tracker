@@ -52,6 +52,7 @@ export function renderProfile(S) {
 
     <p class="list-title">Entries</p>
     <div class="list">
+      <button class="list-row" data-prof="sections"><span class="t"><b>Icons in each section</b><small>Add, remove, or move icons between sections</small></span><span class="v">›</span></button>
       <button class="list-row" data-prof="autoweather"><span class="t"><b>Fill weather automatically</b><small>Uses your location, nothing is uploaded</small></span><span class="v">${S.settings.autoWeather ? 'On' : 'Off'}</span></button>
     </div>
 
@@ -74,6 +75,10 @@ document.addEventListener('click', async (e) => {
   const { db } = await import('./db.js');
   const v = b.dataset.prof;
 
+  if (v === 'sections') {
+    const { openSectionEditor } = await import('./sections.js');
+    openSectionEditor();
+  }
   if (v === 'weekstart') {
     S.settings.weekStart = S.settings.weekStart === 0 ? 1 : 0;
     await db.setSetting('settings', S.settings); render();

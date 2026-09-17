@@ -218,6 +218,7 @@ function menuSheet() {
     ['log', 'Log today', I.plus({ s: 22 })],
     ['archive', 'Archive', I.navArchive({ s: 22 })],
     ['stats', 'Statistics', I.navStats({ s: 22 })],
+    ['sections', 'Edit icon sections', I.tabPuzzle({ s: 22 })],
     ['export', 'Back up data', I.download({ s: 22 })],
     ['profile', 'Settings', I.gear({ s: 22 })]
   ];
@@ -230,6 +231,7 @@ function menuSheet() {
     sheet.close();
     const a = b.dataset.a;
     if (a === 'log') openEditor(todayKey());
+    else if (a === 'sections') import('./sections.js').then(m => m.openSectionEditor());
     else if (a === 'export') exportBackup();
     else { S.tab = a; render(); }
   };
