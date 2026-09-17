@@ -28,9 +28,8 @@ python3 -m http.server 8777     # then open http://localhost:8777
 ## Deploy it
 
 `.github/workflows/pages.yml` publishes the repo root to GitHub Pages on every push to the
-default branch (or `main`). Enable it once under **Settings → Pages → Source: GitHub Actions**,
-then re-run the workflow from the Actions tab; the URL appears in the workflow summary and looks
-like `https://annika-thomas.github.io/tracker/`. Note this repository is public, so the page will
+default branch (or `main`), and switches Pages on by itself the first time it runs. The URL
+appears in the workflow summary and looks like `https://annika-thomas.github.io/tracker/`. Note this repository is public, so the page will
 be too — your entries are not, they never leave your device. Any other static host (Netlify, Cloudflare Pages, Vercel) works too — upload
 the repository as-is.
 
