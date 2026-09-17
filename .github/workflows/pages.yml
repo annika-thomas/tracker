@@ -23,8 +23,6 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: actions/configure-pages@v5
-        with:
-          enablement: true   # turn Pages on the first time, no manual setup
       - uses: actions/upload-pages-artifact@v3
         with:
           path: .
