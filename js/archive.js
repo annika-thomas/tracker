@@ -1,4 +1,4 @@
-import { h, esc, I, openSheet } from './ui.js';
+import { h, esc, I, openSheet, photoURL } from './ui.js';
 import { moodFace, pod, MOODS } from './moods.js';
 import { EMOTIONS, iconSrc } from './icons.js';
 
@@ -41,12 +41,12 @@ export function renderArchive(S) {
       ${moodFace(e.mood, { size: 42 })}
       <span class="t"><b>${MON[m - 1]} ${d}, ${y}</b><p>${DAY[dt.getDay()]} · ${esc(sub)}</p></span>
       ${e.fav ? I.starFull({ s: 18 }) : ''}
-      ${(e.photos || []).length ? `<img src="${URL.createObjectURL(e.photos[0])}" style="width:42px;height:42px;border-radius:9px;object-fit:cover" alt="">` : ''}
+      ${(e.photos || []).length ? `<img src="${photoURL(e.photos[0])}" style="width:42px;height:42px;border-radius:9px;object-fit:cover" alt="">` : ''}
     </button>`;
   }).join('');
 
   const photos = list.flatMap(e => (e.photos || []).map(p => ({ p, date: e.date })));
-  const gallery = photos.map(x => `<img src="${URL.createObjectURL(x.p)}" data-open="${x.date}" alt="">`).join('');
+  const gallery = photos.map(x => `<img src="${photoURL(x.p)}" data-open="${x.date}" alt="">`).join('');
 
   return `<section class="screen is-active" id="s-archive">
     <div class="topbar">

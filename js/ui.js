@@ -84,6 +84,13 @@ export function openFull({ title, titleTrailing = '', right = '', body, foot, on
   return { el: wrap, close };
 }
 
+// object URLs are minted once per photo blob, so re-renders never flash or leak
+const photoURLs = new WeakMap();
+export function photoURL(blob) {
+  if (!photoURLs.has(blob)) photoURLs.set(blob, URL.createObjectURL(blob));
+  return photoURLs.get(blob);
+}
+
 let toastTimer;
 export function toast(msg) {
   document.querySelector('.toast')?.remove();

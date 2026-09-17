@@ -186,12 +186,12 @@ const take = (catId, n) => {
 
 export const EDITOR_SECTIONS = [
   { id: 'people',   title: 'Who I was with', items: PEOPLE.map(p => p.icon), labels: PEOPLE },
-  { id: 'activity', title: 'Activities',     items: take('activity', 30) },
-  { id: 'food',     title: 'Food & Drink',   items: take('food', 30) },
-  { id: 'home',     title: 'Health & Home',  items: take('home', 30) },
+  { id: 'activity', title: 'Activities',     items: take('activity', 24) },
+  { id: 'food',     title: 'Food & Drink',   items: take('food', 24) },
+  { id: 'home',     title: 'Health & Home',  items: take('home', 24) },
   { id: 'exercise', title: 'Exercise',       items: take('exercise', 24), green: true },
-  { id: 'nature',   title: 'Nature',         items: take('nature', 30) },
-  { id: 'object',   title: 'Things',         items: take('object', 30) },
+  { id: 'nature',   title: 'Nature',         items: take('nature', 24) },
+  { id: 'object',   title: 'Things',         items: take('object', 24) },
   { id: 'travel',   title: 'Places',         items: take('travel', 24) }
 ];
 

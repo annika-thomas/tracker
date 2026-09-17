@@ -1,4 +1,4 @@
-import { $, h, esc, I, openSheet, toast } from './ui.js';
+import { $, h, esc, I, openSheet, toast, photoURL } from './ui.js';
 import { MOODS, moodFace, mascot, pod, sprout } from './moods.js';
 import { EMOTIONS, WEATHERS, iconSrc, GREEN_CATEGORY_IDS, categoryOf } from './icons.js';
 import { db, exportJSON, importJSON } from './db.js';
@@ -83,7 +83,6 @@ function calendarScreen() {
   }
 
   const order = [...Array(7)].map((_, i) => DAYS[(i + S.settings.weekStart) % 7]);
-  const sel = S.selected && S.entries.get(S.selected);
 
   return `<section class="screen is-active" id="s-calendar">
     ${topbar()}
@@ -93,13 +92,24 @@ function calendarScreen() {
     </div>
     <div class="weekdays">${order.map(d => `<span>${d}</span>`).join('')}</div>
     <div class="days">${cells}</div>
-    ${S.selected ? `<div class="sprout">${sprout(30)}</div>${sel ? entryCard(sel) : emptyCard(S.selected)}` : ''}
+    <div id="detail">${detailHTML()}</div>
   </section>`;
+}
+
+function detailHTML() {
+  if (!S.selected) return '';
+  const e = S.entries.get(S.selected);
+  return `<div class="sprout">${sprout(30)}</div>${e ? entryCard(e) : emptyCard(S.selected)}`;
+}
+
+export function paintDetail() {
+  const host = document.getElementById('detail');
+  if (host) host.innerHTML = detailHTML();
 }
 
 export function entryCard(e) {
   const d = parseKey(e.date);
-  const photos = (e.photos || []).map(p => `<img src="${URL.createObjectURL(p)}" alt="">`).join('');
+  const photos = (e.photos || []).map(p => `<img src="${photoURL(p)}" alt="">`).join('');
   const emo = (e.emotions || []).map(id => EMOTIONS.find(x => x.id === id)).filter(Boolean);
   const chips = [...emo.map(x => x.icon), ...(e.icons || [])];
   const w = e.weather && WEATHERS.find(x => x.id === e.weather.id);
@@ -285,7 +295,10 @@ document.addEventListener('click', async (ev) => {
   if (day) {
     const k = day.dataset.day;
     if (S.selected === k) { openEditor(k); return; }
-    S.selected = k; render();
+    S.selected = k;
+    document.querySelector('.day.is-selected')?.classList.remove('is-selected');
+    day.classList.add('is-selected');
+    paintDetail();
     document.querySelector('.card')?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
     return;
   }
@@ -303,7 +316,15 @@ document.addEventListener('click', async (ev) => {
     case 'menu': menuSheet(); break;
     case 'export': exportBackup(); break;
     case 'more': entryMenu(k); break;
-    case 'fav': { const e = S.entries.get(k); if (e) saveEntry({ ...e, fav: !e.fav }); break; }
+    case 'fav': {
+      const e = S.entries.get(k);
+      if (!e) break;
+      const next = { ...e, fav: !e.fav };
+      S.entries.set(k, next);
+      act.innerHTML = next.fav ? I.starFull({ s: 19 }) : I.star({ s: 19 });
+      await db.put(next);
+      break;
+    }
     case 'save': {
       const e = S.entries.get(k);
       if (!e) return;

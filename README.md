@@ -40,7 +40,7 @@ the repository as-is.
 | --- | --- |
 | Calendar | Month grid of mood faces; tap a day to see it, tap again to edit. Selected day is pilled in green. |
 | Entry card | Mood, favourite star, photos, emotions + activities as chips, note, weather and sleep. |
-| Editor | Five-mood selector, 20 labelled emotions, then pre-filled sections you tap straight through — who you were with, activities, food, health & home, exercise, nature, things, places — plus photos, note, weather and sleep. Each section has a ＋ that opens the full picker. |
+| Editor | Five-mood selector, then pre-filled labelled sections you tap straight through — emotions, who you were with, activities, food, health & home, exercise, nature, things, places — plus photos, note, weather and sleep. Every icon carries a short name; each section has a ＋ that opens the full picker. |
 | Icon picker | ~410 icons across eight categories — People, Nature, Food & Drink, Travel & Places, Activities, Objects, Health & Home, Exercise (plus stars and digits). |
 | Stats | *Monthly*: Mood Flow line chart and Mood Bar, with a faded sample and a prompt when a month is empty. *Annual*: a year of months as mood dots. |
 | Archive | Every entry, searchable by note or emotion, with the "When did I record…" filter sheet (moods, emotions, period) and favourites. |
@@ -74,7 +74,8 @@ js/
   stats.js              monthly charts and the annual grid
   archive.js            archive list, search, filter sheet
   profile.js            profile and settings
-  icons.js              icon catalogue, emotions, weather list
+  icons.js              icon catalogue, emotions, weather list, editor sections
+  labels.js             short name for every icon (generated, then hand-tuned)
   moods.js              the five mood faces and the mascot, as inline SVG
   db.js                 IndexedDB wrapper, JSON export/import
   ui.js                 DOM helpers, line icons, sheets, toasts
